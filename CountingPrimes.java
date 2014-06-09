@@ -30,7 +30,6 @@ public class CountingPrimes {
 			 */
 			String line;
 			while ((line = br.readLine()) != null) {
-				// TODO: check if min is < max
 				String[] range = line.split(",");
 				int minimum = Integer.parseInt(range[0]);
 				int maximum = Integer.parseInt(range[1]);
