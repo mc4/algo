@@ -61,10 +61,11 @@ public class LongestLines {
 			while ((line = br.readLine()) != null) {
 				lengthTest(line);
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
 		}
-
+		
 		// sort
 		while (numOrdered <= longestWords.length) {
 			int longest = longestWords.length - 1 - numOrdered;
