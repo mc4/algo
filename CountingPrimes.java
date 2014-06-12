@@ -35,6 +35,7 @@ public class CountingPrimes {
 				int maximum = Integer.parseInt(range[1]);
 				System.out.println(countPrimes(minimum, maximum));
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 		} catch (IOException ioe) {
 		}
