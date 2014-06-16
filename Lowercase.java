@@ -9,7 +9,7 @@ public class Lowercase {
 	public static void main(String[] args) {
 
 		File file;
-		BufferedReader reader = null;
+		BufferedReader reader;
 
 		try {
 
