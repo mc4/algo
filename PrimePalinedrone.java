@@ -9,6 +9,12 @@ package codeeval;
 public class PrimePalindrone {
 	static int largestPP;
 	public static void main(String[] args) {
+		
+		if (args.length == 0) {
+			System.out.println("No file to run.");
+			System.exit(0);
+		}
+		
 		for (int i = 10; i < 1000; i++) {
 			if (isPrime(i)) {
 				isPalindrone(i);
