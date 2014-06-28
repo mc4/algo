@@ -46,6 +46,8 @@ public class SetIntersection {
 	private static void buildLists(String line) {
 		int i;
 		StringBuilder sb = new StringBuilder();
+		
+		//build first array, ';' will always happen
 		for (i = 0; i < line.length(); i++) {
 			if (line.charAt(i) == ';') {
 				first.add(sb.toString());
@@ -60,6 +62,7 @@ public class SetIntersection {
 			}
 		}
 		
+		//builds second list
 		for (i++; i <= line.length() + 1; i++) {
 			if (i == line.length()) {
 				second.add(sb.toString());
