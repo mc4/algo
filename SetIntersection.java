@@ -47,7 +47,7 @@ public class SetIntersection {
 		int i;
 		StringBuilder sb = new StringBuilder();
 		
-		//build first array, ';' will always happen
+		//builds first list, ';' will always happen
 		for (i = 0; i < line.length(); i++) {
 			if (line.charAt(i) == ';') {
 				first.add(sb.toString());
