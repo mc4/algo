@@ -24,7 +24,7 @@ public class RightmostChar {
 			file = new File(args[0]);
 			br = new BufferedReader(new FileReader(file));
 			
-			while ((line = br.readLine()) != null){
+			while ((line = br.readLine()) != null) {
 				target = line.charAt(line.length()-1);
 				line = line.substring(0, line.length()-3);
 				if(pos >= 0){
@@ -35,7 +35,7 @@ public class RightmostChar {
 				pos = -1;
 			}
 		} catch (FileNotFoundException e) {
-		} catch (IOException e){	
+		} catch (IOException e) {	
 		}
 	}
 }
