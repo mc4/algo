@@ -22,14 +22,20 @@ public class EvenNumbers {
 		try {
 			file = new File(args[0]);
 			br = new BufferedReader(new FileReader(file));
-			while ((line = br.readLine()) != null ){
+			while ((line = br.readLine()) != null ) {
+				line.trim();
+				if(line.equals(null)) {
+					System.out.println(0);
+					continue;
+				}
 				c = Integer.parseInt(line);
-				if(c%2 == 0){
+				if(c%2 == 0) {
 					System.out.println(1);
 				} else {
 					System.out.println(0);
 				}
 			}
+			br.close();
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
 		}
