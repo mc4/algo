@@ -1,10 +1,10 @@
 /****************************************************************************************
- * 								CHALLENGE DESCRIPTION:									*
- *																					 	*			
+ * 	 			CHALLENGE DESCRIPTION:					*
+ *										 	*
  * You have coordinates of four points on a plane. Check whether they make a square.    *
- * example input: (4,6), (5,5), (5,6), (4,5)											*
- *  																					*
- *																						*
+ * example input: (4,6), (5,5), (5,6), (4,5)						*
+ *  											*
+ *											*
  ****************************************************************************************/
 
  #include <stdio.h>
