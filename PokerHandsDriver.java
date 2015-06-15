@@ -1,56 +1,57 @@
-package practice;
+package codeeval;
 
 public class PokerHandsDriver {
-	final static int numOfCardsInHand = 5;
+
 	final static int royalFlushRank = 23;
 	final static int straightFlushRank = 22;
 	final static int quadRank = 21;
 	final static int fullHouseRank = 20;
-	final int flushRank = 19;
-	final int straightRank = 18;
-	final int tripsRank = 17;
-	final int twoPairRank = 16;
-	final int onePairRank = 15;
+	final static int flushRank = 19;
+	final static int straightRank = 18;
+	final static int tripsRank = 17;
+	final static int twoPairRank = 16;
+	final static int onePairRank = 15;
+
+	final static int numOfCardsInHand = 5;
 
 	public static void main(String[] args) throws Exception {
 		String line = null;
 		PokerHand[] hands = new PokerHand[2];
-		line = "4H 4D 3C 4S 4C 5D 4S 5C 5H 5D";
-		
+		line = "TH JC 6C 2H 2C 2H 2D TC KD 6D";
+
 		hands = createhands(line);
-		
+
 		PokerHand h1 = hands[0];
 		PokerHand h2 = hands[1];
-		
+
 		System.out.println("hand1 is: " + h1.toString());
 		System.out.println("hand2 is: " + h2.toString());
-		
+
 		h1 = sortHand(h1);
 		h2 = sortHand(h2);
-		
+
 		System.out.println("post sort");
 		System.out.println("hand1 is: " + h1.toString());
 		System.out.println("hand2 is: " + h2.toString());
-		
+
 		h1.rank = determineRank(h1);
 		h2.rank = determineRank(h2);
-		
-		System.out.println(h1.getRank());
-		System.out.println(h2.getRank());
-		
+
+		System.out.println(onePairTieBreaker(h1, h2));
+
 		// FIX EQUAL TIE BREAK FOR QUAD
-		System.out.println(tieBreaker(h1, h2));
+		// System.out.println(tieBreakerMaster(h1, h2));
 	}
 
 	/* THIS IS WHY THEY TELL YOU TO MODULARIZE STUFF LOL */
 	/* quad check can be separated */
-	static String tieBreaker(PokerHand h1, PokerHand h2) {
+	static String tieBreakerMaster(PokerHand h1, PokerHand h2) {
 		// System.out.println("h1 rank: " + h1.getRank() + " h2 rank: "
 		// + h2.getRank());
 		if (h1.rank == royalFlushRank && h2.rank == royalFlushRank) {
 			return "none";
 		} else if (h1.rank == straightFlushRank && h2.rank == straightFlushRank) {
-			
+
 			PokerHand h = getHighCard(h1, h2);
 			// no high card
 			if (h == null) {
@@ -61,93 +62,572 @@ public class PokerHandsDriver {
 				return "left";
 			} else if (h2.equals(h)) {
 				return "right";
-			} else {
+			} else { // unnecessary
 				System.out.println("I should be studying for OS");
 			}
 		} else if (h1.rank == quadRank && h2.rank == quadRank) {
-			int h1qv = 0;
-			int h2qv = 0;
-			System.out.println("*********hi from quad check*********");
-			// get quad value for each hand
-			if (h1.cards[0].charAt(0) != h1.cards[1].charAt(0)) {
-				h1qv = Character.getNumericValue(h1.cards[0].charAt(0));
-				if (h1qv >= 10) {
-					h1qv = getFaceCardRank((h1.cards[0].charAt(0)));
-				}
-			} else if (h1.cards[0].charAt(0) != h1.cards[4].charAt(0)) {
-				h1qv = Character.getNumericValue(h1.cards[4].charAt(0));
-				if (h1qv >= 10) {
-					h1qv = getFaceCardRank((h1.cards[4].charAt(0)));
-				}
-			}
-			if (h2.cards[0].charAt(0) != h2.cards[1].charAt(0)) {
-				h2qv = Character.getNumericValue(h2.cards[0].charAt(0));
-				if (h2qv >= 10) {
-					h2qv = getFaceCardRank((h2.cards[0].charAt(0)));
-				}
-			} else if (h2.cards[0].charAt(0) != h2.cards[4].charAt(0)) {
-				h2qv = Character.getNumericValue(h2.cards[4].charAt(0));
-				if (h2qv >= 10) {
-					h2qv = getFaceCardRank((h2.cards[4].charAt(0)));
-				}
-			}
-			System.out.println(h1qv + " vs " + h2qv);
-			// compare quad values
-			if (h1qv > h2qv) {
-				return "left";
-			} else if (h2qv > h1qv) {
-				return "right";
-			}
-			// else compare 5th card
-			int h1FifthCard = 0;
-			int h2FifthCard = 0;
-			// loop through cards if card val doesn't
-			// get h1 high if first card is different
-			if (h1.cardValues[0] != h1.cardValues[1]) {
-				h1FifthCard = h1.cardValues[0];
-			}
-			// h2 highest if first card is not in quad
-			if (h2.cardValues[0] != h2.cardValues[1]) {
-				h2FifthCard = h2.cardValues[0];
-			}
-			// h1 highest fifth
-			if (h1.cardValues[4] != h1.cardValues[3]) {
-				h1FifthCard = h1.cardValues[4];
-			}
-			// h2 highest fifth
-			if (h2.cardValues[4] != h2.cardValues[3]) {
-				h2FifthCard = h2.cardValues[3];
-			}
-			if (h1FifthCard > h2FifthCard) {
-				return "left";
-			} else if (h2FifthCard > h1FifthCard) {
-				return "right";
-			}
-			return "none";
+			return quadTieBreaker(h1, h2);
 		} else if (h1.rank == fullHouseRank && h2.rank == fullHouseRank) {
-			return fullHouseTieBreak(h1, h2);
+			return fullHouseTieBreaker(h1, h2);
+		} else if (h1.rank == flushRank && h2.rank == flushRank) {
+			return flushTieBreaker(h1, h2);
+		} else if (h1.rank == straightRank && h2.rank == straightRank) {
+			return straightTieBreaker(h1, h2);
+		} else if (h1.rank == tripsRank && h2.rank == tripsRank) {
+			return tripsTieBreaker(h1, h2);
+		} else if (h1.rank == twoPairRank && h2.rank == twoPairRank) {
+			return twoPairTieBreaker(h1, h2);
+		} else if (h1.rank == onePairRank && h2.rank == onePairRank) {
+			return onePairTieBreaker(h1, h2);
+		} else {
+			// checks to see if hand are equal
+			for (int i = 0; i < numOfCardsInHand; i++) {
+				if (h1.cards[i].charAt(0) != h2.cards[i].charAt(0)) {
+					break;
+				} else if (i == 4) { // this should work
+					return "none";
+				}
+			}
+			// now we know they're different hands
+			// loop through hands and compare at each index
+			for (int i = numOfCardsInHand - 1; i >= 0; i--) {
+				int a = getCardRank(h1.cards[i].charAt(0));
+				int b = getCardRank(h2.cards[i].charAt(0));
+
+				if (a > b)
+					return "left";
+				else if (a < b)
+					return "right";
+
+			}
+			// can we do this in one loop?????
 		}
-		System.out.println("line 153");
-		return null;
+		// System.out.println("line 153");
+		return "end of tieBreaker";
 	}
-	
-	static String fullHouseTieBreak(PokerHand h1, PokerHand h2){
-		
-		
-		
-		return null;
+
+	// TODO: HOW TO DO THISSS FUCK LIFE
+	static String onePairTieBreaker(PokerHand h1, PokerHand h2) {
+
+		int h1pairVal = 0;
+		int h2pairVal = 0;
+
+		// find pair values
+		for (int i = 0; i < numOfCardsInHand - 1; i++) {
+			if (h1.cards[i].charAt(0) == h1.cards[++i].charAt(0)) {
+				h1pairVal = getCardRank(h1.cards[i].charAt(0));
+				break;
+			}
+			--i;
+		}
+
+		for (int i = 0; i < numOfCardsInHand - 1; i++) {
+			if (h2.cards[i].charAt(0) == h2.cards[++i].charAt(0)) {
+				h2pairVal = getCardRank(h2.cards[i].charAt(0));
+				break;
+			}
+			--i;
+		}
+
+		// compare pair values
+		if (h1pairVal > h2pairVal) {
+			return "left";
+		} else if (h2pairVal > h1pairVal) {
+			return "right";
+		}
+
+		/*
+		 * compare kicker
+		 */
+
+		int top = 0, mid = 0, bottom = 0;
+		int top2 = 0, mid2 = 0, bottom2 = 0;
+
+		for (int i = 0; i < numOfCardsInHand; i++) {
+
+			int currentRank = getCardRank(h1.cards[i].charAt(0));
+
+			if (currentRank == h1pairVal) {
+				continue;
+			} else if (bottom == 0) {
+				bottom = currentRank;
+			} else if (mid == 0) {
+				mid = currentRank;
+			} else if (top == 0) {
+				top = currentRank;
+			}
+
+		}
+
+		for (int i = 0; i < numOfCardsInHand; i++) {
+
+			int currentRank = getCardRank(h2.cards[i].charAt(0));
+
+			if (currentRank == h2pairVal) {
+				continue;
+			} else if (bottom2 == 0) {
+				bottom2 = currentRank;
+			} else if (mid2 == 0) {
+				mid2 = currentRank;
+			} else if (top2 == 0) {
+				top2 = currentRank;
+			}
+
+		}
+
+		// System.out.println(String.format("bottom2 kicker: %d, mid2 kicker: %d, top2 kicker: %d",
+		// bottom2,mid2,top2));
+
+		if (top > top2)
+			return "left1";
+		else if (top < top2)
+			return "right";
+		if (mid > mid2)
+			return "left2";
+		else if (mid < mid2)
+			return "right";
+		if (top > top2)
+			return "left3";
+		else if (bottom < bottom2)
+			return "right";
+
+		return "none";
+	}
+
+	static String twoPairTieBreaker(PokerHand h1, PokerHand h2) {
+
+		int h1TopVal = 0;
+		int h1LowerVal = 0;
+		int h1Kicker = 0;
+
+		int h2TopVal = 0;
+		int h2LowerVal = 0;
+		int h2Kicker = 0;
+
+		char h1FirstCard = h1.cards[0].charAt(0);
+		char h1SecondCard = h1.cards[1].charAt(0);
+		char h1ThirdCard = h1.cards[2].charAt(0);
+		char h1FourthCard = h1.cards[3].charAt(0);
+		char h1FifthCard = h1.cards[4].charAt(0);
+
+		char h2FirstCard = h2.cards[0].charAt(0);
+		char h2SecondCard = h2.cards[1].charAt(0);
+		char h2ThirdCard = h2.cards[2].charAt(0);
+		char h2FourthCard = h2.cards[3].charAt(0);
+		char h2FifthCard = h2.cards[4].charAt(0);
+
+		/* 3 possible scenarios for locations of two pair */
+
+		// first 4 slots have pairs
+		if (h1FirstCard == h1SecondCard && h1ThirdCard == h1FourthCard) {
+			h1TopVal = getCardRank(h1FirstCard); // or second
+			h1LowerVal = getCardRank(h1ThirdCard);// or fourth
+
+			if (h1LowerVal > h1TopVal) {
+				int temp = h1LowerVal;
+				h1LowerVal = h1TopVal;
+				h1TopVal = temp;
+			}
+
+			h1Kicker = getCardRank(h1FifthCard);
+		}
+
+		if (h2FirstCard == h2SecondCard && h2ThirdCard == h2FourthCard) {
+			h2TopVal = getCardRank(h2FirstCard); // or second
+			h2LowerVal = getCardRank(h2ThirdCard);// or fourth
+
+			if (h2LowerVal > h2TopVal) {
+				int temp = h2LowerVal;
+				h2LowerVal = h2TopVal;
+				h2TopVal = temp;
+			}
+
+			h2Kicker = getCardRank(h2FifthCard);
+		}
+
+		// two pair is split
+		if (h1FirstCard == h1SecondCard && h1FourthCard == h1FifthCard) {
+			h1TopVal = getCardRank(h1FirstCard); // or second
+			h1LowerVal = getCardRank(h1FourthCard);// or fifth
+
+			if (h1LowerVal > h1TopVal) {
+				int temp = h1LowerVal;
+				h1LowerVal = h1TopVal;
+				h1TopVal = temp;
+			}
+
+			h1Kicker = getCardRank(h1ThirdCard);
+		}
+
+		if (h2FirstCard == h2SecondCard && h2FourthCard == h2FifthCard) {
+			h2TopVal = getCardRank(h2FirstCard); // or second
+			h2LowerVal = getCardRank(h2FourthCard);// or fifth
+
+			if (h2LowerVal > h2TopVal) {
+				int temp = h2LowerVal;
+				h2LowerVal = h2TopVal;
+				h2TopVal = temp;
+			}
+
+			h2Kicker = getCardRank(h2ThirdCard);
+		}
+
+		// last 4 slots have pairs
+		if (h1SecondCard == h1ThirdCard && h1FourthCard == h1FifthCard) {
+			h1TopVal = getCardRank(h1SecondCard); // or third
+			h1LowerVal = getCardRank(h1FourthCard);// or fifth
+
+			if (h1LowerVal > h1TopVal) {
+				int temp = h1LowerVal;
+				h1LowerVal = h1TopVal;
+				h1TopVal = temp;
+			}
+
+			h1Kicker = getCardRank(h1FirstCard);
+		}
+
+		if (h2SecondCard == h2ThirdCard && h2FourthCard == h2FifthCard) {
+			h2TopVal = getCardRank(h2SecondCard); // or third
+			h2LowerVal = getCardRank(h2FourthCard);// or fifth
+
+			if (h2LowerVal > h2TopVal) {
+				int temp = h2LowerVal;
+				h2LowerVal = h2TopVal;
+				h2TopVal = temp;
+			}
+
+			h2Kicker = getCardRank(h2FirstCard);
+		}
+
+		if (h1TopVal > h2TopVal) {
+			return "left";
+		} else if (h2TopVal > h1TopVal) {
+			return "right";
+		} else if (h1LowerVal > h2LowerVal) {
+			return "left";
+		} else if (h2LowerVal > h1LowerVal) {
+			return "right";
+		} else if (h1Kicker > h2Kicker) {
+			return "left";
+		} else if (h2Kicker > h1Kicker) {
+			return "right";
+		}
+
+		return "none";
+	}
+
+	static String tripsTieBreaker(PokerHand h1, PokerHand h2) {
+
+		char h1FirstCard = h1.cards[0].charAt(0);
+		char h1SecondCard = h1.cards[1].charAt(0);
+		char h1ThirdCard = h1.cards[2].charAt(0);
+		char h1FourthCard = h1.cards[3].charAt(0);
+		char h1FifthCard = h1.cards[4].charAt(0);
+
+		char h2FirstCard = h2.cards[0].charAt(0);
+		char h2SecondCard = h2.cards[1].charAt(0);
+		char h2ThirdCard = h2.cards[2].charAt(0);
+		char h2FourthCard = h2.cards[3].charAt(0);
+		char h2FifthCard = h2.cards[4].charAt(0);
+
+		int firstTripVal = 0;
+		int secondTripVal = 0;
+
+		int h1Kicker = 0;
+		int h1SecondK = 0, h2SecondK = 0;
+		int h2Kicker = 0;
+
+		// if trips is first 3 cards
+		if (h1FirstCard == h1SecondCard && h1FirstCard == h1ThirdCard) {
+			firstTripVal = getCardRank(h1FirstCard);
+
+			h1Kicker = getCardRank(h1FourthCard);
+			h1SecondK = getCardRank(h1FifthCard);
+
+			if (h1SecondK > h1Kicker) {
+				int temp = h1SecondK;
+				h1SecondK = h1Kicker;
+				h1Kicker = temp;
+			}
+
+		}
+
+		if (h2FirstCard == h2SecondCard && h2FirstCard == h2ThirdCard) {
+			secondTripVal = getCardRank(h2FirstCard);
+
+			h2Kicker = getCardRank(h2FourthCard);
+			h2SecondK = getCardRank(h2FifthCard);
+
+			if (h2SecondK > h2Kicker) {
+				int temp = h2SecondK;
+				h2SecondK = h2Kicker;
+				h2Kicker = temp;
+			}
+
+		}
+
+		// if trips is mid 3 cards
+		if (h1SecondCard == h1ThirdCard && h1SecondCard == h1FourthCard) {
+			firstTripVal = getCardRank(h1SecondCard);
+			h1Kicker = getCardRank(h1FirstCard);
+			h1SecondK = getCardRank(h1FifthCard);
+
+			if (h1SecondK > h1Kicker) {
+				int temp = h1SecondK;
+				h1SecondK = h1Kicker;
+				h1Kicker = temp;
+			}
+		}
+
+		if (h2SecondCard == h2ThirdCard && h2SecondCard == h2FourthCard) {
+			secondTripVal = getCardRank(h2SecondCard);
+			h2Kicker = getCardRank(h2FirstCard);
+			h2SecondK = getCardRank(h2FifthCard);
+
+			if (h2SecondK > h2Kicker) {
+				int temp = h2SecondK;
+				h2SecondK = h2Kicker;
+				h2Kicker = temp;
+			}
+		}
+
+		// if trips is last 3 cards
+		if (h1ThirdCard == h1FourthCard && h1ThirdCard == h1FifthCard) {
+			firstTripVal = getCardRank(h1ThirdCard);
+			h1Kicker = getCardRank(h1FirstCard);
+			h1SecondK = getCardRank(h1SecondCard);
+
+			if (h1SecondK > h1Kicker) {
+				int temp = h1SecondK;
+				h1SecondK = h1Kicker;
+				h1Kicker = temp;
+			}
+		}
+
+		if (h2ThirdCard == h2FourthCard && h2ThirdCard == h2FifthCard) {
+			secondTripVal = getCardRank(h2ThirdCard);
+			h2Kicker = getCardRank(h2FirstCard);
+			h2SecondK = getCardRank(h2SecondCard);
+
+			if (h2SecondK > h2Kicker) {
+				int temp = h2SecondK;
+				h2SecondK = h2Kicker;
+				h2Kicker = temp;
+			}
+		}
+
+		if (firstTripVal > secondTripVal) {
+			return "left";
+		} else if (secondTripVal > firstTripVal) {
+			return "right";
+		}
+
+		if (h1Kicker > h2Kicker) {
+			return "left";
+		} else if (h2Kicker > h1Kicker) {
+			return "right";
+		} else if (h1SecondK > h2SecondK) {
+			return "left";
+		} else if (h2SecondK > h1SecondK) {
+			return "right";
+		}
+
+		return "none";
+	}
+
+	static String quadTieBreaker(PokerHand h1, PokerHand h2) {
+		int h1qv = 0;
+		int h2qv = 0;
+		System.out.println("*********hi from quad tieBreak*********");
+		// get quad value for each hand
+		if (h1.cards[0].charAt(0) != h1.cards[1].charAt(0)) {
+			h1qv = Character.getNumericValue(h1.cards[0].charAt(0));
+			if (h1qv >= 10) {
+				h1qv = getFaceCardRank((h1.cards[0].charAt(0)));
+			}
+		} else if (h1.cards[0].charAt(0) != h1.cards[4].charAt(0)) {
+			h1qv = Character.getNumericValue(h1.cards[4].charAt(0));
+			if (h1qv >= 10) {
+				h1qv = getFaceCardRank((h1.cards[4].charAt(0)));
+			}
+		}
+		if (h2.cards[0].charAt(0) != h2.cards[1].charAt(0)) {
+			h2qv = Character.getNumericValue(h2.cards[0].charAt(0));
+			if (h2qv >= 10) {
+				h2qv = getFaceCardRank((h2.cards[0].charAt(0)));
+			}
+		} else if (h2.cards[0].charAt(0) != h2.cards[4].charAt(0)) {
+			h2qv = Character.getNumericValue(h2.cards[4].charAt(0));// IT
+																	// WORKS?!!!?!11!//!?
+			if (h2qv >= 10) {
+				h2qv = getFaceCardRank((h2.cards[4].charAt(0)));
+			}
+		}
+		System.out.println(h1qv + " vs " + h2qv);
+		// compare quad values
+		if (h1qv > h2qv) {
+			return "left";
+		} else if (h2qv > h1qv) {
+			return "right";
+		}
+		// else compare 5th card
+		int h1FifthCardVal = 0;
+		int h2FifthCardVal = 0;
+
+		char h1FirstCard = h1.cards[0].charAt(0);
+		char h1SecondCard = h1.cards[1].charAt(0);
+		// char h1ThirdCard = h1.cards[2].charAt(0);
+		char h1FourthCard = h1.cards[3].charAt(0);
+		char h1FifthCard = h1.cards[4].charAt(0);
+
+		char h2FirstCard = h2.cards[0].charAt(0);
+		char h2SecondCard = h2.cards[1].charAt(0);
+		// char h2ThirdCard = h2.cards[2].charAt(0);
+		char h2FourthCard = h2.cards[3].charAt(0);
+		char h2FifthCard = h2.cards[4].charAt(0);
+
+		// loop through cards if card val doesn't
+		// get h1 high if first card is different
+		if (h1FirstCard != h1SecondCard) {
+			h1FifthCardVal = h1FirstCard;
+		}
+		// h2 highest if first card is not in quad
+		if (h2FirstCard != h2SecondCard) {
+			h2FifthCardVal = h2FirstCard;
+		}
+		// h1 highest fifth
+		if (h1FifthCard != h1FourthCard) {
+			h1FifthCardVal = h1FifthCard;
+		}
+		// h2 highest fifth
+		if (h2FifthCard != h2FourthCard) {
+			h2FifthCardVal = h2FourthCard;
+		}
+
+		if (h1FifthCardVal > h2FifthCardVal) {
+			return "left";
+		} else if (h2FifthCardVal > h1FifthCardVal) {
+			return "right";
+		}
+		return "none";
+	}
+
+	static String fullHouseTieBreaker(PokerHand h1, PokerHand h2) {
+
+		int h1TripsVal;
+		int h1PairVal;
+
+		int h2TripsVal;
+		int h2PairVal;
+
+		char h1FirstCard = h1.cards[0].charAt(0);
+		char h1SecondCard = h1.cards[1].charAt(0);
+		char h1ThirdCard = h1.cards[2].charAt(0);
+		char h1FourthCard = h1.cards[3].charAt(0);
+
+		char h2FirstCard = h2.cards[0].charAt(0);
+		char h2SecondCard = h2.cards[1].charAt(0);
+		char h2ThirdCard = h2.cards[2].charAt(0);
+		char h2FourthCard = h2.cards[3].charAt(0);
+
+		if ((h1FirstCard == h1SecondCard) && (h1FirstCard == h1ThirdCard)) {
+			h1TripsVal = h1FirstCard;// we know first three cards will be index
+										// 0-2
+			h1PairVal = h1FourthCard;// we know 4th and 5th card will be index
+										// 3-4
+		} else {
+			h1TripsVal = h1FourthCard;
+			h1PairVal = h1FirstCard;
+		}
+
+		if ((h2FirstCard == h2SecondCard) && (h2FirstCard == h2ThirdCard)) {
+			h2TripsVal = h2FirstCard;// we know first three cards will be index
+										// 0-2
+			h2PairVal = h2FourthCard;// we know 4th and 5th card will be index
+										// 3-4
+		} else {
+			h2TripsVal = h2FourthCard;
+			h2PairVal = h2FirstCard;
+		}
+
+		if (h1TripsVal > h2TripsVal) {
+			return "left";
+		} else if (h2TripsVal > h1TripsVal) {
+			return "right";
+		} else if (h1PairVal > h2PairVal) {
+			return "left";
+		} else if (h2PairVal > h1PairVal) {
+			return "right";
+		} else {
+			return "none";
+		}
+
+	}
+
+	static String flushTieBreaker(PokerHand h1, PokerHand h2) {
+
+		for (int i = numOfCardsInHand - 1; i >= 0; i--) {
+			// get card rank
+			int temp1 = Character.getNumericValue(h1.cards[i].charAt(0));
+			if (temp1 >= 10) {
+				temp1 = getFaceCardRank((h1.cards[i].charAt(0)));
+			}
+
+			int temp2 = Character.getNumericValue(h2.cards[i].charAt(0));
+			if (temp2 >= 10) {
+				temp2 = getFaceCardRank((h2.cards[i].charAt(0)));
+			}
+
+			if (temp1 > temp2)
+				return "left";
+			else if (temp2 > temp1)
+				return "right";
+		}
+		return "none";
+
+	}
+
+	static String straightTieBreaker(PokerHand h1, PokerHand h2) {
+
+		// check for special case where A-5 straight
+		if (h1.cards[4].charAt(0) == 'A' && h2.cards[4].charAt(0) == 'A') {
+			return "none";
+		} else if (h1.cards[4].charAt(0) == 'A') {
+			return "right";
+		} else if (h2.cards[4].charAt(0) == 'A') {
+			return "left";
+		}
+
+		for (int i = numOfCardsInHand - 1; i >= 0; i--) {
+			// get card rank
+			int temp1 = Character.getNumericValue(h1.cards[i].charAt(0));
+			if (temp1 >= 10) {
+				temp1 = getFaceCardRank((h1.cards[i].charAt(0)));
+			}
+
+			int temp2 = Character.getNumericValue(h2.cards[i].charAt(0));
+			if (temp2 >= 10) {
+				temp2 = getFaceCardRank((h2.cards[i].charAt(0)));
+			}
+
+			if (temp1 > temp2)
+				return "left";
+			else if (temp2 > temp1)
+				return "right";
+		}
+		return "none";
+
 	}
 
 	// returns the hand in first index and index of high card in second index
 	// return null if no high card is found
+	// TODO: check if you need to create a new PH object or if you can just
+	// return h1 or h2 to save space
 	static PokerHand getHighCard(PokerHand h1, PokerHand h2) {
 		PokerHand high = null;
 		int h1Val = 0;
 		int h2Val = 0;
-		// System.out.println();
-		// System.out.println(h1.toString() + " in gHC");
-		// System.out.println(h2.toString() + " in gHC");
-		// System.out.println();
+
 		for (int i = numOfCardsInHand - 1; i >= 0; i--) {
 			// get card rank
 			int temp1 = Character.getNumericValue(h1.cards[i].charAt(0));
@@ -319,6 +799,16 @@ public class PokerHandsDriver {
 	/***************
 	 * Utilities *
 	 ***************/
+
+	static int getCardRank(char c) {
+		int rank;
+		rank = Character.getNumericValue(c);
+		if (rank >= 10) {
+			rank = getFaceCardRank(c);
+		}
+		return rank;
+	}
+
 	static int getFaceCardRank(char c) {
 		int r = 0;
 		switch (c) {
@@ -459,24 +949,23 @@ public class PokerHandsDriver {
 			// fill first hand
 			if (i <= 4) {
 				h1.cards[i] = tokens[i];
-				if (Character.isDigit(h1.cards[i].charAt(0))) {
-					h1.cardValues[i] = Character.getNumericValue(h1.cards[i]
-							.charAt(0)) - 1;
-				} else {
-					h1.cardValues[i] = getFaceCardRank(h1.cards[i].charAt(0)) - 1;
-				}
+				/*
+				 * if (Character.isDigit(h1.cards[i].charAt(0))) {
+				 * h1.cardValues[i] = (int)tokens[i].charAt(0); } else {
+				 * h1.cardValues[i] = getFaceCardRank(tokens[i].charAt(0)); }
+				 */
 				// fill second hand
 			} else {
 				h2.cards[i - 5] = tokens[i];
-				if (Character.isDigit(h2.cards[i - 5].charAt(0))) {
-					h2.cardValues[i - 5] = Character
-							.getNumericValue(h2.cards[i - 5].charAt(0)) - 1;
-				} else {
-					h2.cardValues[i - 5] = getFaceCardRank(h2.cards[i - 5]
-							.charAt(0)) - 1;
-				}
+				/*
+				 * if (Character.isDigit(h2.cards[i - 5].charAt(0))) {
+				 * h2.cardValues[i - 5] = (int)(tokens[i - 5].charAt(0)); } else
+				 * { h2.cardValues[i - 5] = getFaceCardRank(tokens[i -
+				 * 5].charAt(0)); }
+				 */
 			}
 		}
+
 		PokerHand[] tuple = new PokerHand[2];
 		tuple[0] = h1;
 		tuple[1] = h2;
@@ -486,12 +975,12 @@ public class PokerHandsDriver {
 	/* Poker Hand class */
 	public static class PokerHand {
 		String[] cards;
-		int[] cardValues;
+		// int[] cardValues;
 		int rank;
 
 		public PokerHand() {
 			this.cards = new String[5];
-			this.cardValues = new int[5];
+			// this.cardValues = new int[5];
 			this.rank = 0;
 		}
 
@@ -507,8 +996,8 @@ public class PokerHandsDriver {
 			PokerHand that = (PokerHand) other;
 			// Custom equality check here.
 			return this.cards.equals(that.cards)
-					&& this.cardValues.equals(that.cardValues)
-					&& this.rank == that.rank;
+			/* && this.cardValues.equals(that.cardValues) */
+			&& this.rank == that.rank;
 		}
 
 		public String toString() {
