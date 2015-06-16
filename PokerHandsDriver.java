@@ -1,6 +1,10 @@
 package codeeval;
 
-public class PokerHandsDriver {
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
+public class PokerHands {
 
 	final static int royalFlushRank = 23;
 	final static int straightFlushRank = 22;
@@ -11,36 +15,45 @@ public class PokerHandsDriver {
 	final static int tripsRank = 17;
 	final static int twoPairRank = 16;
 	final static int onePairRank = 15;
-
+	
 	final static int numOfCardsInHand = 5;
 
 	public static void main(String[] args) throws Exception {
-		String line = null;
+
+		File file;
+		BufferedReader br;
+		String line;
 		PokerHand[] hands = new PokerHand[2];
-		line = "TH JC 6C 2H 2C 2H 2D TC KD 6D";
 
-		hands = createhands(line);
+		file = new File(args[0]);
+		br = new BufferedReader(new FileReader(file));
 
-		PokerHand h1 = hands[0];
-		PokerHand h2 = hands[1];
+		while ((line = br.readLine()) != null) {
+			line = line.trim();
 
-		System.out.println("hand1 is: " + h1.toString());
-		System.out.println("hand2 is: " + h2.toString());
+			if (line.length() == 0) {
+				continue;
+			}
 
-		h1 = sortHand(h1);
-		h2 = sortHand(h2);
+			//create hands
+			hands = createhands(line);
+			PokerHand h1 = sortHand(hands[0]);
+			PokerHand h2 = sortHand(hands[1]);
+			
+			h1.rank = determineRank(h1);
+			h2.rank = determineRank(h2);
+			
+			if(h1.getRank() > h2.getRank()){
+				System.out.println("left");
+			} else if( h1.getRank() < h2.getRank()){
+				System.out.println("right");
+			} else {
+				System.out.println(tieBreakerMaster(h1,h2));
+			}	
+			
+		}
 
-		System.out.println("post sort");
-		System.out.println("hand1 is: " + h1.toString());
-		System.out.println("hand2 is: " + h2.toString());
-
-		h1.rank = determineRank(h1);
-		h2.rank = determineRank(h2);
-
-		System.out.println(onePairTieBreaker(h1, h2));
-
-		// FIX EQUAL TIE BREAK FOR QUAD
-		// System.out.println(tieBreakerMaster(h1, h2));
+		br.close();
 	}
 
 	/* THIS IS WHY THEY TELL YOU TO MODULARIZE STUFF LOL */
@@ -179,15 +192,17 @@ public class PokerHandsDriver {
 		// bottom2,mid2,top2));
 
 		if (top > top2)
-			return "left1";
+			return "left";
 		else if (top < top2)
 			return "right";
-		if (mid > mid2)
-			return "left2";
+		else if (mid > mid2)
+			return "left";
 		else if (mid < mid2)
 			return "right";
-		if (top > top2)
-			return "left3";
+		else if (top > top2)
+			return "left";
+		else if(bottom > bottom2)
+			return "left";
 		else if (bottom < bottom2)
 			return "right";
 
