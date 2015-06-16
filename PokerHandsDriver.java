@@ -1,10 +1,6 @@
 package codeeval;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-
-public class PokerHands {
+public class PokerHandsDriver {
 
 	final static int royalFlushRank = 23;
 	final static int straightFlushRank = 22;
@@ -15,45 +11,36 @@ public class PokerHands {
 	final static int tripsRank = 17;
 	final static int twoPairRank = 16;
 	final static int onePairRank = 15;
-	
+
 	final static int numOfCardsInHand = 5;
 
 	public static void main(String[] args) throws Exception {
-
-		File file;
-		BufferedReader br;
-		String line;
+		String line = null;
 		PokerHand[] hands = new PokerHand[2];
+		line = "4C 3D 7C 3S 9S 9C 3C 3H 7H 2S";
 
-		file = new File(args[0]);
-		br = new BufferedReader(new FileReader(file));
+		hands = createhands(line);
 
-		while ((line = br.readLine()) != null) {
-			line = line.trim();
+		PokerHand h1 = hands[0];
+		PokerHand h2 = hands[1];
 
-			if (line.length() == 0) {
-				continue;
-			}
+		System.out.println("hand1 is: " + h1.toString());
+		System.out.println("hand2 is: " + h2.toString());
 
-			//create hands
-			hands = createhands(line);
-			PokerHand h1 = sortHand(hands[0]);
-			PokerHand h2 = sortHand(hands[1]);
-			
-			h1.rank = determineRank(h1);
-			h2.rank = determineRank(h2);
-			
-			if(h1.getRank() > h2.getRank()){
-				System.out.println("left");
-			} else if( h1.getRank() < h2.getRank()){
-				System.out.println("right");
-			} else {
-				System.out.println(tieBreakerMaster(h1,h2));
-			}	
-			
-		}
+		h1 = sortHand(h1);
+		h2 = sortHand(h2);
 
-		br.close();
+		System.out.println("post sort");
+		System.out.println("hand1 is: " + h1.toString());
+		System.out.println("hand2 is: " + h2.toString());
+
+		h1.rank = determineRank(h1);
+		h2.rank = determineRank(h2);
+
+		System.out.println(h1.rank + " " + h2.rank);
+
+		// FIX EQUAL TIE BREAK FOR QUAD
+		System.out.println(tieBreakerMaster(h1, h2));
 	}
 
 	/* THIS IS WHY THEY TELL YOU TO MODULARIZE STUFF LOL */
@@ -172,6 +159,10 @@ public class PokerHands {
 
 		}
 
+		System.out.println(String.format(
+				"bottom kicker: %d, mid kicker: %d, top kicker: %d", bottom,
+				mid, top));
+
 		for (int i = 0; i < numOfCardsInHand; i++) {
 
 			int currentRank = getCardRank(h2.cards[i].charAt(0));
@@ -188,8 +179,9 @@ public class PokerHands {
 
 		}
 
-		// System.out.println(String.format("bottom2 kicker: %d, mid2 kicker: %d, top2 kicker: %d",
-		// bottom2,mid2,top2));
+		System.out.println(String.format(
+				"bottom2 kicker: %d, mid2 kicker: %d, top2 kicker: %d",
+				bottom2, mid2, top2));
 
 		if (top > top2)
 			return "left";
