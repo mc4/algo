@@ -1,7 +1,5 @@
 package codeeval;
 
-import codeeval.PokerHands.PokerHand;
-
 public class PokerHandsDriver {
 
 	final static int royalFlushRank = 23;
