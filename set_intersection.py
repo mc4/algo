@@ -9,8 +9,7 @@ def main():
 
     lists = line.split(';')
 
-    a = set(lists[0].split(','))
-    b = set(lists[1].split(','))
+    a, b = set(lists[0].split(',')), set(lists[1].split(','))
 
     print (a & b)
 
