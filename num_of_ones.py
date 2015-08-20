@@ -2,16 +2,14 @@ import sys
 from math import pow
 
 def get_binary_factor(x):
-	if x==0: 
-		return 0
-	if x==1: 
-		return 1
+	if x==0: return 0
+	if x==1: return 1
 	factor=0
 	num=0
 	while num < x:
 		num += pow(2,factor)
-		factor+=1
-	return factor-1
+		factor += 1
+	return factor - 1 #this is ugly :(
 
 def dec_to_bin(x):
 	''' converts the int x in decimal form to the binary number in a string '''
