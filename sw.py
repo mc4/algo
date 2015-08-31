@@ -10,8 +10,7 @@ def g(ls):
 	return lw
 
 def p(w):
-	sc=0
-	rw=''
+	sc,rw=0,''
 	for i in xrange(len(w)):
 		for j in xrange(sc):
 			rw += '*'
