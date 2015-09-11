@@ -2,13 +2,9 @@ import sys
 
 def printPercentage(seq):
 
-	lowerCount = 0
-	upperCount = 0
-	total = 0
+	lowerCount = upperCount = total = 0
 
 	for char in seq:
-		if char == '\n':
-			continue
 		if char.isupper():
 			upperCount += 1
 		else:
@@ -19,13 +15,13 @@ def printPercentage(seq):
 	lowerPercentage = (float(lowerCount)/total) * 100
 	upperPercentage = (float(upperCount)/total) * 100
 
-	print 'lowercase: %.2f uppercase: %.2f' % (lowerPercentage, upperPercentage)
+	return 'lowercase: %.2f uppercase: %.2f' % (lowerPercentage, upperPercentage)
 
 def main():
 	f = open(sys.argv[1], 'rU')
 
 	for line in f:
-		printPercentage(line)
+		print get_percent(line.strip())
 
 	f.close()
 
