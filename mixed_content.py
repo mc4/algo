@@ -9,7 +9,5 @@ with open(sys.argv[1], 'r') as testcases:
 
 		if stuff and nums:
 			print ','.join(stuff) + '|' + ','.join(nums)
-		elif not nums:
-			print ','.join(stuff)
 		else:
-			print ','.join(nums)
+			print test.strip()
