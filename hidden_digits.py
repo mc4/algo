@@ -10,4 +10,4 @@ with open(sys.argv[1], 'r') as tc:
 			elif c.isdigit():
 				res += str(c)
 
-		print res if len(res) != 0 else 'NONE'
+		print res if res else 'NONE'
