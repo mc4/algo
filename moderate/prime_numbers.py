@@ -10,4 +10,5 @@ def cpl(m):
 	
 with open(sys.argv[1], 'r') as tc:
 	for t in tc:
-		print ','.join(cpl(int(t.strip())))
+		if t:
+			print ','.join(cpl(int(t.strip())))
