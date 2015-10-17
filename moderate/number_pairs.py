@@ -12,7 +12,4 @@ with open(sys.argv[1], 'r') as testcases:
 				if numbers[i] + numbers[j] == int(target):
 					pairs.append(str(numbers[i])+','+str(numbers[j]))
 
-		if len(pairs) == 0:
-			print 'NULL'
-		else:
-			print ';'.join(pairs)
+		print ';'.join(pairs) if len(pais) != 0 else 'NULL'
