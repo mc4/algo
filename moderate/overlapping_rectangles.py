@@ -12,9 +12,11 @@ def overlap(c):
 	lower_right_x_B = c[6]
 	lower_right_y_B = c[7] 
 
+	# If one rectangle is on left side of other
 	if upper_left_x_A > lower_right_x_B or upper_left_x_B > lower_right_x_A:
 		return False
 
+	# If one rectangle is above other
 	if upper_left_y_A < lower_right_y_B or upper_left_y_B < lower_right_y_A:
 		return False
 
@@ -22,5 +24,4 @@ def overlap(c):
 
 with open(sys.argv[1], 'r') as test_cases:
 	for test in test_cases:
-		c = [float(_) for _ in test.strip().split(',')]
 		print overlap(map(float, test.strip().split(',')))
