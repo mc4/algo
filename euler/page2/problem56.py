@@ -6,11 +6,9 @@ def sum_digits(n):
 	return s
 
 maximum = 0
-
 for a in xrange(100):
 	for b in xrange(100):
 		tmp = sum_digits(a ** b)
 		if tmp > maximum:
-			maximum = tmp
-
+			maximum = tmp 
 print maximum
