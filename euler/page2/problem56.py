@@ -12,3 +12,4 @@ for a in xrange(100):
 		if tmp > maximum:
 			maximum = tmp 
 print maximum
+#solution: 972
