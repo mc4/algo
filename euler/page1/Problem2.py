@@ -1,4 +1,4 @@
-def even_fibs(limit = 4000000):
+def sum_of_even_fibs(limit = 4000000):
  	a, b, c = 1, 1, 0
 
 	while a < limit:
@@ -7,4 +7,4 @@ def even_fibs(limit = 4000000):
 			c += a
 	return c
 
-print even_fibs()
+print sum_of_even_fibs()
