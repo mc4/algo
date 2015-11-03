@@ -1,5 +1,6 @@
 import sys
 
+'''
 def is_palindrome(value):
 
 	letters = str(value)
@@ -14,6 +15,12 @@ def is_palindrome(value):
 		return is_palindrome(letters[start+1:last])
 	
 	return False
+
+'''
+
+def is_palindrome(s):
+	'''fastest palindrome check'''
+	return s == s[::-1] #fastest
 
 with open(sys.argv[1], 'r') as testcases:
 	for test in testcases:
