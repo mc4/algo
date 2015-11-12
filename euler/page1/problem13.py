@@ -104,4 +104,5 @@ numbers = '''37107287533902102798797998220837590246510135740250
 53503534226472524250874054075591789781264330331690'''
 
 list_of_nums = '\n'.join(numbers.split('\n')).split('\n')
-print(sum([ int(x) for x in ls]))
+#print(sum([ int(x) for x in list_of_nums])) #prints the entire sum of each in list
+print(str(sum([ int(x) for x in list_of_nums]))[:10])
