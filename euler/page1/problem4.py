@@ -7,4 +7,5 @@ for i in xrange(100, 1000):
 		t = i * j
 		if is_palindrome(str(t)) and t > maximum:
 			maximum = t
+			
 print maximum
