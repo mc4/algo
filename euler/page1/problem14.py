@@ -23,5 +23,4 @@ for n in range(1, 1000000):
 		max_chain_len = new
 		max_chain = n
 
-
 print(max_chain)
