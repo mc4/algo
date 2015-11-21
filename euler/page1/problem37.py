@@ -41,7 +41,7 @@ while len(ls) <= 11:
 		ls.append(mark)
 	mark += 1
 
-#print(ls)
+print(ls)
 print(sum(ls))
 
 # 748317
