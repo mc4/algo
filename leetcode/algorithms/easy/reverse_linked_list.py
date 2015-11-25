@@ -21,4 +21,5 @@ class Solution(object):
            
         return prev
         
-#Runtime: 60 ms
+#27/27 test cases        
+#Runtime: 60 ms 
