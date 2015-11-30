@@ -18,6 +18,7 @@ class Solution(object):
         right_height = self.maxDepth(root.right)
         
         return left_height+1 if left_height > right_height else right_height+1
+        # return 1 + max(self.maxDepth(root.left), self.maxDepth(root.right))
 
 # 36/36 test cases passed
 # Runtime: 60 ms
