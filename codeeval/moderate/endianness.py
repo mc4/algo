@@ -1,6 +1,4 @@
+# python 3.5
 import sys
 
-if sys.byteorder == 'little':
-	print 'LittleEndian'
-else:
-	print 'BigEndian'
+print('LittleEndian') if sys.byteorder == 'little' else 'BigEndian'
