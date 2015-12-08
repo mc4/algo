@@ -14,3 +14,7 @@ class Solution(object):
             return nums1[0]
             
         return nums1[l/2] if l%2 else (nums1[(l/2)-1] + nums1[l/2])/2.0
+
+# 2078 / 2078 test cases passed.
+# Status: Accepted
+# Runtime: 104 ms
