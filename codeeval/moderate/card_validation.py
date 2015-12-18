@@ -8,7 +8,7 @@ def validate(card_num):
 	def Luhn_formula(card_num):
 
 		for index, num in enumerate(card_num[::-1]):
-			if is_odd(index):
+			if is_odd(index):	
 				tmp = int(num) * 2
 				if tmp > 9:
 					s = int(str(tmp)[0]) + int(str(tmp)[1])
