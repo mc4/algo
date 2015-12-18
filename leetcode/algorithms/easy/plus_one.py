@@ -5,4 +5,5 @@ class Solution(object):
         :rtype: List[int]
         """
         #return 1 + int( ''.join(digits) )
-        return [ 1 + int(filter(str.isdigit, repr(digits))) ]
+        #return list(str(1 + int(filter(str.isdigit, repr(digits))) ))
+        return [int(x) for x in str(1 + int(''.join(map(str, digits))))]
