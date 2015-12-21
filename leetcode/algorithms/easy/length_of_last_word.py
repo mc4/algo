@@ -5,8 +5,7 @@ class Solution(object):
         :rtype: int
         """
 
-		words = s.split()
-        
+		words = s.split()      
         if not words:
             return 0
         return len(words[-1]) # faster than 64.50% of Python submissions
