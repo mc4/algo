@@ -37,7 +37,6 @@ class Solution(object):
 
 
 #         This seems faster, but theres alot of assumptions. 
-#         Kind of cool because it only uses one pointer
 #     2. This might be slightly faster
 
 #             slow = fast = head
