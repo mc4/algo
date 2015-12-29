@@ -12,5 +12,5 @@ class Solution(object):
                     slow = slow.next
                     finder = finder.next
                 return finder
-                
+                     
         return None
