@@ -10,3 +10,5 @@ class Solution(object):
             nums.pop(0)
         
         return res
+
+       	# return [max(nums[i:i+k]) for i in xrange(len(nums)-k+1)]
