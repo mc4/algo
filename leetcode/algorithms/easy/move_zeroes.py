@@ -13,7 +13,7 @@ class Solution(object):
         for i in xrange(j, l):
             nums[i] = 0
 
-        # # Algorithm 2 r
+        # # Algorithm 2
 
         # for i, n in enumerate(nums[1:], start = 1):
         #     if n == 0:
