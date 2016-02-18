@@ -1,6 +1,6 @@
 class Solution(object):
     def summaryRanges(self, nums):
-        
+
         def process(start,end):
             scope = ''
             if start == end:
@@ -28,5 +28,4 @@ class Solution(object):
         
         res.append(process(start, end))
         return res
-                
                 
