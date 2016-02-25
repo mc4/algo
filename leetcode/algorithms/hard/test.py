@@ -1,17 +1,17 @@
-from bisect import insort
-# import operator
+# from bisect import insort
+# # import operator
 
 
 
-ls = [1,2,3]
+# ls = [1,2,3]
 
-def step(ls):
-	ls = [i**2 for i in ls]
-	print ls
+# def step(ls):
+# 	ls = [i**2 for i in ls]
+# 	print ls
 	
-print ls
-step(ls)
-print ls		
+# print ls
+# step(ls)
+# print ls		
 
 # class Interval(object):
 # 	def __init__(self, s=0, e=0):
@@ -50,3 +50,18 @@ print ls
 
 # # i = bisect.bisect([e.start for e in intervals], newInterval.start)
 # # print i
+
+
+import re 
+
+S = 'Forget VCVs... i need to know more!'
+
+
+sentences = re.split('[?.!]', S)
+
+for words in sentences:
+	# print words
+	if words:
+		print words
+
+
