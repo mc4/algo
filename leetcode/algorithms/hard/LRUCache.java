@@ -28,17 +28,17 @@ public class LRUCache extends LinkedHashMap<Integer, Integer> {
     }
     
     public int get(int key) {
-    	if(this.containsKey(key)){
+    	if(containsKey(key)){
     		return super.get(key);
     	}
         return -1;
     }
     
     public void set(int key, int value) {
-    	if(!(this.containsKey(key)) && size() == capacity){
-    		Set<Integer> keys = this.keySet();
-    		int element = (int) keys.iterator().next();
-    		this.remove(element);
+    	if(!(containsKey(key)) && size() == capacity){
+    		Set<Integer> keys = keySet();
+    		int element = keys.iterator().next();
+    		remove(element);
     	}
     	super.put(key, value);
     }
