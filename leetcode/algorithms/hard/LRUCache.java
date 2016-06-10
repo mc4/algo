@@ -29,7 +29,7 @@ public class LRUCache extends LinkedHashMap<Integer, Integer> {
     
     public int get(int key) {
     	if(containsKey(key)){
-    		return super.get(key);
+    		return get(key);
     	}
         return -1;
     }
@@ -40,7 +40,7 @@ public class LRUCache extends LinkedHashMap<Integer, Integer> {
     		int element = keys.iterator().next();
     		remove(element);
     	}
-    	super.put(key, value);
+    	put(key, value);
     }
     
 }
